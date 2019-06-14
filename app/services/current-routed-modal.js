@@ -32,17 +32,18 @@ export default Service.extend({
         const routerMain = this.get('routing.router');
         const routerLib = routerMain._routerMicrolib || routerMain.router;
         const handlerInfos = routerLib.state.routeInfos;
-        const currentController = handlerInfos[handlerInfos.length - 1]._route.controller;
+        const index = handlerInfos.findIndex(el => {
+            return el._route.controller._isModalRoute;
+        });
 
         this.set('routeName', null);
 
-        if (currentController._isModalRoute) {
-            const parentRoute = handlerInfos[handlerInfos.length - 2].name;
-
+        if (index > 0) {
+            const parentRoute = handlerInfos[index-1].name;
             routerLib.transitionTo(parentRoute);
-        } else {
+        }
+        else {
             const url = this.get('router').urlFor(this.get('router.currentRouteName'))
-
             routerLib.updateURL(url);
         }
     }

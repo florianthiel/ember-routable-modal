@@ -1,6 +1,7 @@
 import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import Mixin from '@ember/object/mixin';
+import { isEmpty } from '@ember/utils';
 
 function objectValues(obj) {
     const vals = [];
@@ -68,7 +69,11 @@ export default Mixin.create({
                 this.enter();
                 this.setup(model, transition);
 
-                getOwner(this).lookup('route:application').connections = getOwner(this).lookup('route:application').connections.concat(this.connections);
+                var appCon = getOwner(this).lookup('route:application').connections;
+                if (isEmpty(appCon)) {
+                    appCon = [];
+                }
+                getOwner(this).lookup('route:application').connections = appCon.concat(this.connections);
 
                 transition.abort();
             }
