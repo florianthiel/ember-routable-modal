@@ -16,8 +16,8 @@ function objectValues(obj) {
 function getURL(routing, transition) {
     let params = [];
 
-    if (transition.params) {
-        params = objectValues(transition.params).filter(param => {
+    if (transition.to.params) {
+        params = objectValues(transition.to.params).filter(param => {
           return objectValues(param).length;
         });
     }
@@ -44,7 +44,7 @@ export default Mixin.create({
         if (initial) {
             const handlerInfos = transition.routeInfos;
             const parentRoute = handlerInfos[handlerInfos.length - 2].name;
-            
+
             this.transitionTo(parentRoute).method(false).then(() => {
                 transition.retry();
             });
